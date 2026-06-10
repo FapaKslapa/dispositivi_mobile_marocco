@@ -6,6 +6,28 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.0] — 2026-06-10
+
+### Added
+- Macrobenchmark module for baseline profile generation.
+- `DrugCategoryFilterRow` reusable filter chip component.
+- `DrugFormatUtils` shared formatting utilities (`formatDose`, `label`).
+
+### Changed
+- Detekt static analysis configured and active on every CI run.
+- `RemindersSheet` split into focused private composables (`ActiveRemindersSection`, `ReminderCard`).
+- `DeleteDrugDialog` extracted from `DrugSelectionScreen`.
+- CI workflow now runs ktlint, detekt, tests and lint; release workflow simplified.
+- `WidgetDataProvider` migrated to Hilt `EntryPointAccessors`.
+
+### Fixed
+- Unsafe `InteractionRiskLevel.valueOf()` replaced with safe `runCatching` fallback.
+- Duplicate UUID generation removed from `HistoryRepositoryImpl`.
+- Leading space in reminder notification text.
+- `CalculatorViewModel` nested coroutine launch removed.
+
+---
+
 ## [1.1.1] — 2026-04-10
 
 ### Fixed
@@ -68,6 +90,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.2.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.2.0
 [1.1.1]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.1.1
 [1.1.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.1.0
 [1.0.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.0.0
