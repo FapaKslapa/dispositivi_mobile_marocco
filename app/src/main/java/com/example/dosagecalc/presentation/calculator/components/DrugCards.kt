@@ -18,7 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -26,6 +27,8 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,10 +49,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dosagecalc.domain.model.Drug
 import com.example.dosagecalc.domain.model.DrugCategory
-import com.example.dosagecalc.domain.model.FormulaType
 import com.example.dosagecalc.presentation.ui.theme.LocalDosageShapes
 import com.example.dosagecalc.presentation.ui.theme.LocalElevation
 import com.example.dosagecalc.presentation.ui.theme.spacing
+import com.example.dosagecalc.presentation.ui.util.label
 
 private data class CategoryColors(
     val container: Color,
@@ -66,14 +70,6 @@ private fun DrugCategory.colors(): CategoryColors {
         DrugCategory.OTHER -> CategoryColors(cs.surfaceVariant, cs.onSurfaceVariant)
     }
 }
-
-private fun FormulaType.label(): String =
-    when (this) {
-        FormulaType.PER_KG -> "per kg"
-        FormulaType.PER_M2 -> "per m²"
-        FormulaType.FIXED -> "dose fissa"
-        FormulaType.BY_RANGE -> "per fascia"
-    }
 
 @Composable
 fun DrugSelectionCard(
@@ -379,6 +375,45 @@ fun DrugPreviewCard(drug: Drug) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DrugCategoryFilterRow(
+    selectedCategory: DrugCategory?,
+    onCategorySelected: (DrugCategory?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val shapes = LocalDosageShapes.current
+    val sp = MaterialTheme.spacing
+    val cs = MaterialTheme.colorScheme
+    val chipColors =
+        FilterChipDefaults.filterChipColors(
+            selectedContainerColor = cs.primary,
+            selectedLabelColor = cs.onPrimary,
+        )
+    LazyRow(
+        modifier = modifier.fillMaxWidth().padding(horizontal = sp.lg),
+        horizontalArrangement = Arrangement.spacedBy(sp.sm),
+    ) {
+        item {
+            FilterChip(
+                selected = selectedCategory == null,
+                onClick = { onCategorySelected(null) },
+                label = { Text("Tutti") },
+                shape = shapes.chip,
+                colors = chipColors,
+            )
+        }
+        items(DrugCategory.entries) { category ->
+            FilterChip(
+                selected = selectedCategory == category,
+                onClick = { onCategorySelected(category) },
+                label = { Text(category.label) },
+                shape = shapes.chip,
+                colors = chipColors,
+            )
         }
     }
 }

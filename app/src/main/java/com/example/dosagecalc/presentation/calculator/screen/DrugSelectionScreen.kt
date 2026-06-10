@@ -55,8 +55,10 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.dosagecalc.domain.model.Drug
 import com.example.dosagecalc.presentation.calculator.CalculatorViewModel
 import com.example.dosagecalc.presentation.calculator.components.DashboardShortcuts
+import com.example.dosagecalc.presentation.calculator.components.DrugCategoryFilterRow
 import com.example.dosagecalc.presentation.calculator.components.DrugPreviewCard
 import com.example.dosagecalc.presentation.calculator.components.DrugSelectionCard
 import com.example.dosagecalc.presentation.ui.components.GradientBottomBar
@@ -94,7 +96,7 @@ fun DrugSelectionScreen(
         delay(80)
         listVisible = true
     }
-    var drugToDelete by remember { mutableStateOf<com.example.dosagecalc.domain.model.Drug?>(null) }
+    var drugToDelete by remember { mutableStateOf<Drug?>(null) }
     val activity = androidx.activity.compose.LocalActivity.current
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     BackHandler { activity?.finish() }
@@ -240,37 +242,10 @@ fun DrugSelectionScreen(
                     }
                 }
 
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = sp.lg),
-                    horizontalArrangement = Arrangement.spacedBy(sp.sm),
-                ) {
-                    item {
-                        androidx.compose.material3.FilterChip(
-                            selected = uiState.selectedCategory == null,
-                            onClick = { viewModel.onCategorySelected(null) },
-                            label = { Text("Tutti") },
-                            shape = shapes.chip,
-                            colors =
-                                androidx.compose.material3.FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                                ),
-                        )
-                    }
-                    items(com.example.dosagecalc.domain.model.DrugCategory.entries) { category ->
-                        androidx.compose.material3.FilterChip(
-                            selected = uiState.selectedCategory == category,
-                            onClick = { viewModel.onCategorySelected(category) },
-                            label = { Text(category.label) },
-                            shape = shapes.chip,
-                            colors =
-                                androidx.compose.material3.FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
-                                ),
-                        )
-                    }
-                }
+                DrugCategoryFilterRow(
+                    selectedCategory = uiState.selectedCategory,
+                    onCategorySelected = viewModel::onCategorySelected,
+                )
                 AnimatedVisibility(
                     visible = listVisible,
                     enter = fadeIn(tween(280)),
@@ -392,33 +367,14 @@ fun DrugSelectionScreen(
             }
         }
 
-        if (drugToDelete != null) {
-            AlertDialog(
-                onDismissRequest = { drugToDelete = null },
-                title = { Text("Eliminare ${drugToDelete?.name}?") },
-                text = { Text("Sei sicuro di voler eliminare definitivamente questo farmaco personalizzato?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            val id = drugToDelete?.id
-                            if (id != null) {
-                                viewModel.deleteCustomDrug(id)
-                            }
-                            drugToDelete = null
-                        },
-                        shape = shapes.pill,
-                    ) {
-                        Text("Elimina", color = MaterialTheme.colorScheme.error)
-                    }
+        drugToDelete?.let { drug ->
+            DeleteDrugDialog(
+                drugName = drug.name,
+                onConfirm = {
+                    viewModel.deleteCustomDrug(drug.id)
+                    drugToDelete = null
                 },
-                dismissButton = {
-                    TextButton(
-                        onClick = { drugToDelete = null },
-                        shape = shapes.pill,
-                    ) {
-                        Text("Annulla")
-                    }
-                },
+                onDismiss = { drugToDelete = null },
             )
         }
 
@@ -446,4 +402,28 @@ fun DrugSelectionScreen(
             }
         }
     }
+}
+
+@Composable
+private fun DeleteDrugDialog(
+    drugName: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val shapes = LocalDosageShapes.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Eliminare $drugName?") },
+        text = { Text("Sei sicuro di voler eliminare definitivamente questo farmaco personalizzato?") },
+        confirmButton = {
+            TextButton(onClick = onConfirm, shape = shapes.pill) {
+                Text("Elimina", color = MaterialTheme.colorScheme.error)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, shape = shapes.pill) {
+                Text("Annulla")
+            }
+        },
+    )
 }

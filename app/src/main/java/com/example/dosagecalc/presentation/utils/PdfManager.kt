@@ -12,6 +12,8 @@ import androidx.core.content.FileProvider
 import com.example.dosagecalc.domain.model.DosageResult
 import com.example.dosagecalc.domain.model.Drug
 import com.example.dosagecalc.domain.model.Patient
+import com.example.dosagecalc.presentation.ui.util.formatDose
+import com.example.dosagecalc.presentation.ui.util.label
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDateTime
@@ -245,7 +247,7 @@ object PdfManager {
             listOf(
                 "Farmaco" to drug.name,
                 "Indicazione" to drug.indication,
-                "Formula" to drug.formulaType.labelIt(),
+                "Formula" to drug.formulaType.label(),
             )
         val cardH = 28f + rows.size * 22f + 12f
         drawCard(canvas, startY, cardH, CLR_SURFACE)
@@ -257,7 +259,7 @@ object PdfManager {
             y += 22f
         }
 
-        val badgeText = "  ${drug.formulaType.labelIt()}  "
+        val badgeText = "  ${drug.formulaType.label()}  "
         val badgePaint = txt(9f, CLR_PRIMARY)
         val badgeW = badgePaint.measureText(badgeText)
         canvas.drawRoundRect(
@@ -390,19 +392,12 @@ object PdfManager {
             }
     }
 
-    private fun formatDoseRange(result: DosageResult.Success): String {
-        fun fmt(d: Double) =
-            if (d == d.toLong().toDouble()) {
-                d.toLong().toString()
-            } else {
-                String.format(Locale.US, "%.2f", d)
-            }
-        return if (result.totalDoseMax != null) {
-            "${fmt(result.totalDose)} – ${fmt(result.totalDoseMax)}"
+    private fun formatDoseRange(result: DosageResult.Success): String =
+        if (result.totalDoseMax != null) {
+            "${result.totalDose.formatDose()} – ${result.totalDoseMax.formatDose()}"
         } else {
-            fmt(result.totalDose)
+            result.totalDose.formatDose()
         }
-    }
 
     private fun wrapText(
         text: String,
@@ -424,11 +419,3 @@ object PdfManager {
         return lines.ifEmpty { listOf(text) }
     }
 }
-
-private fun com.example.dosagecalc.domain.model.FormulaType.labelIt() =
-    when (this) {
-        com.example.dosagecalc.domain.model.FormulaType.PER_KG -> "per kg"
-        com.example.dosagecalc.domain.model.FormulaType.PER_M2 -> "per m²"
-        com.example.dosagecalc.domain.model.FormulaType.FIXED -> "dose fissa"
-        com.example.dosagecalc.domain.model.FormulaType.BY_RANGE -> "per fascia"
-    }

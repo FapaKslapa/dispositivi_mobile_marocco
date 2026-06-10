@@ -42,8 +42,8 @@ import com.example.dosagecalc.presentation.ui.components.GradientScreenHeader
 import com.example.dosagecalc.presentation.ui.components.OutlinedTintCard
 import com.example.dosagecalc.presentation.ui.theme.LocalDosageShapes
 import com.example.dosagecalc.presentation.ui.theme.spacing
+import com.example.dosagecalc.presentation.ui.util.formatDose
 import com.example.dosagecalc.presentation.ui.util.isCompactHeight
-import java.util.Locale
 
 @Composable
 fun SuccessHeader(
@@ -96,9 +96,9 @@ fun SuccessHeader(
 
             val rangeText =
                 if (displayDoseMax != null) {
-                    "${formatDose(displayDose)} - ${formatDose(displayDoseMax)}"
+                    "${displayDose.formatDose()} - ${displayDoseMax.formatDose()}"
                 } else {
-                    formatDose(displayDose)
+                    displayDose.formatDose()
                 }
 
             Text(
@@ -214,14 +214,14 @@ fun DetailsCard(result: DosageResult.Success) {
                     result.totalCycleDose?.let { cycleDose ->
                         DoseRow(
                             label = "Dose per ciclo",
-                            value = "${formatDose(cycleDose)} ${result.unit}",
+                            value = "${cycleDose.formatDose()} ${result.unit}",
                             color = cs.primary,
                         )
                     }
                     result.totalTherapyDose?.let { therapyDose ->
                         DoseRow(
                             label = "Dose totale terapia",
-                            value = "${formatDose(therapyDose)} ${result.unit}",
+                            value = "${therapyDose.formatDose()} ${result.unit}",
                             color = cs.tertiary,
                         )
                     }
@@ -357,10 +357,3 @@ fun DisclaimerCard() {
         }
     }
 }
-
-private fun formatDose(dose: Double): String =
-    if (dose == dose.toLong().toDouble()) {
-        dose.toLong().toString()
-    } else {
-        String.format(Locale.US, "%.2f", dose)
-    }
