@@ -15,7 +15,9 @@ data class DrugInteractionDto(
         DrugInteraction(
             drugId1 = drugId1,
             drugId2 = drugId2,
-            riskLevel = InteractionRiskLevel.valueOf(riskLevel.uppercase()),
+            riskLevel =
+                runCatching { InteractionRiskLevel.valueOf(riskLevel.uppercase()) }
+                    .getOrDefault(InteractionRiskLevel.LOW),
             description = description,
         )
 }

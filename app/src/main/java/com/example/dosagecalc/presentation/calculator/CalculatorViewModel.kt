@@ -245,10 +245,7 @@ class CalculatorViewModel
                             notes = null,
                         )
                     manageHistoryUseCase.saveHistoryRecord(record)
-
-                    viewModelScope.launch {
-                        WidgetUpdateHelper.updateAllWidgets(context)
-                    }
+                    WidgetUpdateHelper.updateAllWidgets(context)
                 }
 
                 _uiState.update {

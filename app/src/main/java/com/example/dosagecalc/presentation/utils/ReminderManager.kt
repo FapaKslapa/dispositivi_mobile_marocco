@@ -59,7 +59,7 @@ object ReminderManager {
                 Data
                     .Builder()
                     .putString("drug_name", drugName)
-                    .putString("message", " è il momento di somministrare.")
+                    .putString("message", "è il momento di somministrare.")
                     .build()
             val workRequest =
                 OneTimeWorkRequestBuilder<ReminderWorker>()

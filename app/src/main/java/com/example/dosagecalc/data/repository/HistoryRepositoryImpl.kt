@@ -70,14 +70,7 @@ class HistoryRepositoryImpl(
 
     private fun HistoryRecord.toEntity(): HistoryEntity =
         HistoryEntity(
-            id =
-                if (id.isBlank()) {
-                    java.util.UUID
-                        .randomUUID()
-                        .toString()
-                } else {
-                    id
-                },
+            id = id,
             patientId = patientId,
             drugId = drugId,
             drugName = drugName,
