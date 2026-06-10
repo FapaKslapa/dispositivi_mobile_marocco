@@ -1,5 +1,6 @@
 [versions]
 agp = "9.2.1"
+detekt = "1.23.8"
 kotlin = "2.3.20"
 ksp = "2.3.6"
 coreKtx = "1.18.0"
@@ -25,6 +26,9 @@ androidxTestRunner = "1.7.0"
 vico = "2.0.0-alpha.28"
 sqlcipher = "4.14.1"
 glance = "1.1.1"
+profileinstaller = "1.4.1"
+macrobenchmark = "1.3.4"
+uiautomator = "2.3.0"
 
 [libraries]
 androidx-glance = { group = "androidx.glance", name = "glance", version.ref = "glance" }
@@ -91,6 +95,10 @@ material3-window-size           = { group = "androidx.compose.material3", name =
 mockk-core                      = { group = "io.mockk",          name = "mockk",                 version.ref = "mockk" }
 turbine                         = { group = "app.cash.turbine",  name = "turbine",               version.ref = "turbine" }
 
+androidx-profileinstaller        = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+androidx-benchmark-macro-junit4  = { group = "androidx.benchmark",        name = "benchmark-macro-junit4", version.ref = "macrobenchmark" }
+androidx-uiautomator             = { group = "androidx.test.uiautomator", name = "uiautomator",      version.ref = "uiautomator" }
+
 # Testing - Instrumented (versions managed by BOM)
 androidx-test-runner             = { group = "androidx.test",             name = "runner",           version.ref = "androidxTestRunner" }
 androidx-compose-ui-test-junit4  = { group = "androidx.compose.ui",      name = "ui-test-junit4" }
@@ -98,8 +106,11 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui",     name = 
 
 [plugins]
 android-application     = { id = "com.android.application",            version.ref = "agp" }
+detekt                  = { id = "io.gitlab.arturbosch.detekt",         version.ref = "detekt" }
 kotlin-compose          = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization    = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt-android            = { id = "com.google.dagger.hilt.android",     version.ref = "hilt" }
 ksp                     = { id = "com.google.devtools.ksp",            version.ref = "ksp" }
 ktlint                  = { id = "org.jlleitschuh.gradle.ktlint",      version.ref = "ktlint" }
+android-test            = { id = "com.android.test",                     version.ref = "agp" }
+kotlin-android          = { id = "org.jetbrains.kotlin.android",         version.ref = "kotlin" }

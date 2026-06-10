@@ -18,3 +18,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "DosageCalc"
 include(":app")
+include(":macrobenchmark")
