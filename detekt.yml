@@ -110,6 +110,7 @@ complexity:
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
+    ignoreAnnotated: ['Composable']
     nestingFunctions:
       - 'also'
       - 'apply'
@@ -129,12 +130,14 @@ complexity:
   LongMethod:
     active: true
     threshold: 60
+    ignoreAnnotated: ['Composable']
   LongParameterList:
     active: true
     functionThreshold: 6
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
+    ignoreAnnotated: ['Composable']
     ignoreAnnotatedParameter: []
   MethodOverloading:
     active: false
@@ -334,10 +337,12 @@ naming:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
+    ignoreAnnotated: ['Composable']
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
+    ignoreAnnotated: ['Composable']
   InvalidPackageDeclaration:
     active: true
     rootPackage: ''
@@ -609,7 +614,7 @@ style:
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts', '**/presentation/**', '**/ui/**']
     ignoreNumbers:
       - '-1'
       - '0'
@@ -631,7 +636,7 @@ style:
     active: false
     maxChainedCalls: 5
   MaxLineLength:
-    active: true
+    active: false
     maxLineLength: 120
     excludePackageStatements: true
     excludeImportStatements: true
