@@ -295,13 +295,7 @@ fun RemindersSheet(
                             viewModel.addReminder(reminder)
                             ReminderManager.scheduleReminder(
                                 context = context,
-                                seriesId = seriesId,
-                                drugName = drugName,
-                                interval = selectedInterval,
-                                daySelection = ds,
-                                hour = timePickerState.hour,
-                                minute = timePickerState.minute,
-                                duration = dur,
+                                reminder = reminder,
                             )
                             Toast.makeText(context, "Promemoria impostato!", Toast.LENGTH_SHORT).show()
                             onDismissRequest()

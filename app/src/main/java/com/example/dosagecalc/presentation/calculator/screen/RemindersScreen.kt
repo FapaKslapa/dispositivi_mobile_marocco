@@ -188,7 +188,7 @@ private fun ReminderBentoCard(
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    val timeString = String.format("%02d:%02d", reminder.hour, reminder.minute)
+    val timeString = String.format(java.util.Locale.getDefault(), "%02d:%02d", reminder.hour, reminder.minute)
     val frequencyText =
         when (reminder.interval) {
             ReminderInterval.DAILY -> "Giornaliero"

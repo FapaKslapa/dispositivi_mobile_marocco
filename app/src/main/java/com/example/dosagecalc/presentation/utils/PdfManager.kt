@@ -20,12 +20,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+@Suppress("TooManyFunctions", "MagicNumber")
 object PdfManager {
     private val CLR_PRIMARY = Color.parseColor("#6760F6")
     private val CLR_PRIMARY_CONT = Color.parseColor("#E8DEFF")
     private val CLR_ON_PRIMARY = Color.WHITE
-    private val CLR_SECONDARY = Color.parseColor("#148F84")
-    private val CLR_SECONDARY_CONT = Color.parseColor("#B8EAE7")
     private val CLR_ERROR = Color.parseColor("#BA1A1A")
     private val CLR_ERROR_CONT = Color.parseColor("#FFDAD6")
     private val CLR_BACKGROUND = Color.parseColor("#FAF7F2")
@@ -63,8 +62,10 @@ object PdfManager {
 
         document.finishPage(page)
 
+        @Suppress("TooGenericExceptionCaught")
         try {
-            val file = File(context.cacheDir, "DosageCalc_${drug.name.replace(" ", "_")}_${System.currentTimeMillis()}.pdf")
+            val fileNameStr = "DosageCalc_${drug.name.replace(" ", "_")}_${System.currentTimeMillis()}.pdf"
+            val file = File(context.cacheDir, fileNameStr)
             document.writeTo(FileOutputStream(file))
             document.close()
 
@@ -78,7 +79,7 @@ object PdfManager {
                 }
             context.startActivity(Intent.createChooser(intent, "Condividi il referto…"))
         } catch (e: Exception) {
-            e.printStackTrace()
+            android.util.Log.e("PdfManager", "Error sharing PDF", e)
             document.close()
         }
     }
@@ -331,7 +332,8 @@ object PdfManager {
         canvas.drawRect(MX, lineY, MX + CW, lineY + 0.8f, fill(CLR_OUTLINE))
         val disc =
             "DISCLAIMER: Strumento a finalità esclusivamente didattiche. " +
-                "Non sostituisce la valutazione clinica del medico. Verificare sempre il dosaggio sulla scheda tecnica ufficiale (RCP/AIFA)."
+                "Non sostituisce la valutazione clinica del medico. " +
+                "Verificare sempre il dosaggio sulla scheda tecnica ufficiale (RCP/AIFA)."
         val discLines = wrapText(disc, 88)
         var y = lineY + 14f
         for (line in discLines) {

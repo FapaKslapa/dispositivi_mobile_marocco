@@ -28,6 +28,7 @@ class AddDataViewModel
             }
         }
 
+        @Suppress("LongParameterList")
         fun saveCustomDrug(
             id: String? = null,
             name: String,

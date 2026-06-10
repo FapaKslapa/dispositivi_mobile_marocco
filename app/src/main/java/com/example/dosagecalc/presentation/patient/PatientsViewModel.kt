@@ -50,6 +50,7 @@ class PatientsViewModel
             _searchQuery.value = query
         }
 
+        @Suppress("LongParameterList")
         fun savePatient(
             name: String,
             surname: String,
@@ -81,6 +82,7 @@ class PatientsViewModel
             }
         }
 
+        @Suppress("LongParameterList")
         fun updatePatient(
             original: Patient,
             name: String,

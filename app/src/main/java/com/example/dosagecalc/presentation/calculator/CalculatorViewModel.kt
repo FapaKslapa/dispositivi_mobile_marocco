@@ -32,6 +32,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("TooManyFunctions", "LongParameterList")
 class CalculatorViewModel
     @Inject
     constructor(
