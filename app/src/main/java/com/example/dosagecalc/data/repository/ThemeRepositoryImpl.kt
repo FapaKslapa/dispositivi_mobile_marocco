@@ -28,12 +28,13 @@ class ThemeRepositoryImpl
             dataStore.edit { it[isDarkKey] = dark }
         }
 
+        @Suppress("SwallowedException")
         override val bsaFormula: Flow<BsaFormulaType> =
             dataStore.data.map { prefs ->
                 val name = prefs[bsaFormulaKey] ?: BsaFormulaType.MOSTELLER.name
                 try {
                     BsaFormulaType.valueOf(name)
-                } catch (e: Exception) {
+                } catch (e: IllegalArgumentException) {
                     BsaFormulaType.MOSTELLER
                 }
             }

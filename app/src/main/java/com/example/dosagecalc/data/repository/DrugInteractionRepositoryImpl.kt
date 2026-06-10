@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
+import java.io.IOException
+import kotlinx.serialization.SerializationException
+
 class DrugInteractionRepositoryImpl
     @Inject
     constructor(
@@ -35,11 +38,14 @@ class DrugInteractionRepositoryImpl
                         (it.drugId1 == drugId2 && it.drugId2 == drugId1)
                 }
 
+        @Suppress("SwallowedException")
         private fun loadInteractions(): List<DrugInteractionDto> =
             try {
                 val jsonString = context.assets.open(fileName).use { it.bufferedReader().readText() }
                 json.decodeFromString<List<DrugInteractionDto>>(jsonString)
-            } catch (e: Exception) {
+            } catch (e: IOException) {
+                emptyList()
+            } catch (e: SerializationException) {
                 emptyList()
             }
     }
