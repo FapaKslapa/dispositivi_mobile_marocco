@@ -6,7 +6,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.2.0] — 2026-06-10
+## [1.4.0] — 2026-06-10
 
 ### Added
 - Macrobenchmark module for baseline profile generation.
@@ -90,7 +90,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-[1.2.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.2.0
+[1.4.0]: https://github.com/FapaKslapa/dosage_calc/releases/tag/v1.4.0
 [1.1.1]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.1.1
 [1.1.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.1.0
 [1.0.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.0.0
