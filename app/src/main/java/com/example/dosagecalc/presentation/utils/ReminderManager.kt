@@ -3,12 +3,11 @@ import android.content.Context
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.dosagecalc.domain.model.Reminder
 import com.example.dosagecalc.domain.model.ReminderInterval
 import com.example.dosagecalc.presentation.utils.worker.ReminderWorker
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-
-import com.example.dosagecalc.domain.model.Reminder
 
 object ReminderManager {
     fun scheduleReminder(
@@ -41,8 +40,11 @@ object ReminderManager {
         }
     }
 
-    private fun calculateReminderTime(reminder: Reminder, index: Int): Calendar {
-        return Calendar.getInstance().apply {
+    private fun calculateReminderTime(
+        reminder: Reminder,
+        index: Int,
+    ): Calendar =
+        Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, reminder.hour)
             set(Calendar.MINUTE, reminder.minute)
@@ -70,7 +72,6 @@ object ReminderManager {
                 }
             }
         }
-    }
 
     fun cancelReminderSeries(
         context: Context,

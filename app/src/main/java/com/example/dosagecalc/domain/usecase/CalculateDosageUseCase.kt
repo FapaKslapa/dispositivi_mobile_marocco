@@ -59,11 +59,12 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDose = if (drug.daysPerCycle != null) finalDose * drug.daysPerCycle else null
-            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) {
-                cycleDose * drug.numberOfCycles
-            } else {
-                null
-            }
+            val therapyDose =
+                if (cycleDose != null && drug.numberOfCycles != null) {
+                    cycleDose * drug.numberOfCycles
+                } else {
+                    null
+                }
 
             return DosageResult.Success(
                 totalDose = finalDose,
@@ -104,11 +105,12 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDose = if (drug.daysPerCycle != null) finalDose * drug.daysPerCycle else null
-            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) {
-                cycleDose * drug.numberOfCycles
-            } else {
-                null
-            }
+            val therapyDose =
+                if (cycleDose != null && drug.numberOfCycles != null) {
+                    cycleDose * drug.numberOfCycles
+                } else {
+                    null
+                }
 
             return DosageResult.Success(
                 totalDose = finalDose,
@@ -133,11 +135,12 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDose = if (drug.daysPerCycle != null) impairedDose * drug.daysPerCycle else null
-            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) {
-                cycleDose * drug.numberOfCycles
-            } else {
-                null
-            }
+            val therapyDose =
+                if (cycleDose != null && drug.numberOfCycles != null) {
+                    cycleDose * drug.numberOfCycles
+                } else {
+                    null
+                }
 
             return DosageResult.Success(
                 totalDose = impairedDose,
@@ -176,11 +179,12 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDoseMin = if (drug.daysPerCycle != null) finalMin * drug.daysPerCycle else null
-            val therapyDoseMin = if (cycleDoseMin != null && drug.numberOfCycles != null) {
-                cycleDoseMin * drug.numberOfCycles
-            } else {
-                null
-            }
+            val therapyDoseMin =
+                if (cycleDoseMin != null && drug.numberOfCycles != null) {
+                    cycleDoseMin * drug.numberOfCycles
+                } else {
+                    null
+                }
 
             return DosageResult.Success(
                 totalDose = finalMin,
@@ -213,7 +217,7 @@ class CalculateDosageUseCase
             dose: Double,
             drug: Drug,
             patientData: PatientData,
-            alerts: MutableList<String>
+            alerts: MutableList<String>,
         ): Double {
             if (!patientData.hasRenalImpairment) return dose
             val stage = patientData.renalStage
@@ -238,7 +242,7 @@ class CalculateDosageUseCase
             dose: Double,
             drug: Drug,
             patientData: PatientData,
-            alerts: MutableList<String>
+            alerts: MutableList<String>,
         ): Double {
             if (!patientData.hasHepaticImpairment) return dose
             val stage = patientData.hepaticStage

@@ -35,7 +35,7 @@ class ValidateInputUseCase
         private fun validateFormulaRequirements(
             drug: Drug,
             patientData: PatientData,
-            errors: MutableList<String>
+            errors: MutableList<String>,
         ) {
             when (drug.formulaType) {
                 FormulaType.PER_KG, FormulaType.BY_RANGE -> {
@@ -57,7 +57,7 @@ class ValidateInputUseCase
 
         private fun validatePhysiologicalRanges(
             patientData: PatientData,
-            errors: MutableList<String>
+            errors: MutableList<String>,
         ) {
             patientData.weightKg?.let { w ->
                 if (w < MIN_WEIGHT || w > MAX_WEIGHT) {
@@ -81,7 +81,7 @@ class ValidateInputUseCase
         private fun validateDrugConstraints(
             drug: Drug,
             patientData: PatientData,
-            errors: MutableList<String>
+            errors: MutableList<String>,
         ) {
             drug.minWeightKg?.let { minW ->
                 patientData.weightKg?.let { w ->
