@@ -92,115 +92,7 @@ fun RemindersSheet(
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = sp.xl),
         ) {
-            Column(modifier = Modifier.padding(horizontal = sp.xl)) {
-                Text(
-                    text = "Promemoria Attivi",
-                    style = MaterialTheme.typography.titleLarge.copy(fontFamily = FontFamily.Serif),
-                    color = cs.onSurface,
-                )
-                Spacer(modifier = Modifier.height(sp.sm))
-            }
-
-            if (reminders.isEmpty()) {
-                Surface(
-                    shape = shapes.card,
-                    color = cs.surfaceVariant.copy(alpha = 0.45f),
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = sp.xl),
-                ) {
-                    Text(
-                        text = "Nessun promemoria attivo.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = cs.onSurfaceVariant,
-                        modifier = Modifier.padding(sp.lg),
-                    )
-                }
-            } else {
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = sp.xl),
-                    horizontalArrangement = Arrangement.spacedBy(sp.base),
-                ) {
-                    items(reminders, key = { it.id }) { reminder ->
-                        val timeString = String.format(Locale.US, "%02d:%02d", reminder.hour, reminder.minute)
-                        val intervalText =
-                            when (reminder.interval) {
-                                ReminderInterval.DAILY -> "Giornaliero"
-                                ReminderInterval.WEEKLY -> "Sett. · G${reminder.daySelection}"
-                                ReminderInterval.MONTHLY -> "Mens. · G${reminder.daySelection}"
-                            }
-                        Card(
-                            modifier = Modifier.width(180.dp),
-                            shape = shapes.card,
-                            colors =
-                                CardDefaults.cardColors(
-                                    containerColor = cs.secondaryContainer.copy(alpha = 0.5f),
-                                ),
-                            border = BorderStroke(0.5.dp, cs.secondary.copy(alpha = 0.25f)),
-                        ) {
-                            Column(modifier = Modifier.padding(sp.base)) {
-                                Surface(
-                                    shape = shapes.chip,
-                                    color = cs.secondary.copy(alpha = 0.13f),
-                                ) {
-                                    Text(
-                                        text = timeString,
-                                        style =
-                                            MaterialTheme.typography.titleMedium.copy(
-                                                fontFamily = FontFamily.Serif,
-                                                fontWeight = FontWeight.Medium,
-                                            ),
-                                        color = cs.secondary,
-                                        modifier = Modifier.padding(horizontal = sp.sm, vertical = 4.dp),
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(sp.xs))
-                                Text(
-                                    text = reminder.drugName,
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                                    color = cs.onSurface,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                                Spacer(modifier = Modifier.height(sp.xs))
-                                Surface(shape = shapes.chip, color = cs.surface) {
-                                    Text(
-                                        text = intervalText,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = cs.onSurfaceVariant,
-                                        modifier = Modifier.padding(horizontal = sp.sm, vertical = 3.dp),
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(sp.sm))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End,
-                                ) {
-                                    TextButton(
-                                        onClick = {
-                                            ReminderManager.cancelReminderSeries(context, reminder.id)
-                                            viewModel.deleteReminder(reminder.id)
-                                            Toast.makeText(context, "Promemoria eliminato", Toast.LENGTH_SHORT).show()
-                                        },
-                                        shape = shapes.chip,
-                                        colors = ButtonDefaults.textButtonColors(contentColor = cs.error),
-                                        contentPadding = PaddingValues(horizontal = sp.sm, vertical = 4.dp),
-                                    ) {
-                                        Icon(
-                                            Icons.Default.Delete,
-                                            contentDescription = "Elimina",
-                                            modifier = Modifier.size(14.dp),
-                                        )
-                                        Spacer(modifier = Modifier.width(3.dp))
-                                        Text("Elimina", style = MaterialTheme.typography.labelMedium)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            ActiveRemindersSection(reminders = reminders, context = context, viewModel = viewModel)
 
             Spacer(modifier = Modifier.height(sp.lg))
 
@@ -417,6 +309,138 @@ fun RemindersSheet(
                         label = "Salva Promemoria",
                         modifier = Modifier.fillMaxWidth(),
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ActiveRemindersSection(
+    reminders: List<Reminder>,
+    context: Context,
+    viewModel: RemindersViewModel,
+) {
+    val shapes = LocalDosageShapes.current
+    val sp = MaterialTheme.spacing
+    val cs = MaterialTheme.colorScheme
+
+    Column(modifier = Modifier.padding(horizontal = sp.xl)) {
+        Text(
+            text = "Promemoria Attivi",
+            style = MaterialTheme.typography.titleLarge.copy(fontFamily = FontFamily.Serif),
+            color = cs.onSurface,
+        )
+        Spacer(modifier = Modifier.height(sp.sm))
+    }
+
+    if (reminders.isEmpty()) {
+        Surface(
+            shape = shapes.card,
+            color = cs.surfaceVariant.copy(alpha = 0.45f),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = sp.xl),
+        ) {
+            Text(
+                text = "Nessun promemoria attivo.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = cs.onSurfaceVariant,
+                modifier = Modifier.padding(sp.lg),
+            )
+        }
+    } else {
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = sp.xl),
+            horizontalArrangement = Arrangement.spacedBy(sp.base),
+        ) {
+            items(reminders, key = { it.id }) { reminder ->
+                ReminderCard(reminder = reminder, context = context, viewModel = viewModel)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReminderCard(
+    reminder: Reminder,
+    context: Context,
+    viewModel: RemindersViewModel,
+) {
+    val shapes = LocalDosageShapes.current
+    val sp = MaterialTheme.spacing
+    val cs = MaterialTheme.colorScheme
+
+    val timeString = String.format(Locale.US, "%02d:%02d", reminder.hour, reminder.minute)
+    val intervalText =
+        when (reminder.interval) {
+            ReminderInterval.DAILY -> "Giornaliero"
+            ReminderInterval.WEEKLY -> "Sett. · G${reminder.daySelection}"
+            ReminderInterval.MONTHLY -> "Mens. · G${reminder.daySelection}"
+        }
+
+    Card(
+        modifier = Modifier.width(180.dp),
+        shape = shapes.card,
+        colors =
+            CardDefaults.cardColors(
+                containerColor = cs.secondaryContainer.copy(alpha = 0.5f),
+            ),
+        border = BorderStroke(0.5.dp, cs.secondary.copy(alpha = 0.25f)),
+    ) {
+        Column(modifier = Modifier.padding(sp.base)) {
+            Surface(shape = shapes.chip, color = cs.secondary.copy(alpha = 0.13f)) {
+                Text(
+                    text = timeString,
+                    style =
+                        MaterialTheme.typography.titleMedium.copy(
+                            fontFamily = FontFamily.Serif,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    color = cs.secondary,
+                    modifier = Modifier.padding(horizontal = sp.sm, vertical = 4.dp),
+                )
+            }
+            Spacer(modifier = Modifier.height(sp.xs))
+            Text(
+                text = reminder.drugName,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = cs.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(sp.xs))
+            Surface(shape = shapes.chip, color = cs.surface) {
+                Text(
+                    text = intervalText,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = cs.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = sp.sm, vertical = 3.dp),
+                )
+            }
+            Spacer(modifier = Modifier.height(sp.sm))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                TextButton(
+                    onClick = {
+                        ReminderManager.cancelReminderSeries(context, reminder.id)
+                        viewModel.deleteReminder(reminder.id)
+                        Toast.makeText(context, "Promemoria eliminato", Toast.LENGTH_SHORT).show()
+                    },
+                    shape = shapes.chip,
+                    colors = ButtonDefaults.textButtonColors(contentColor = cs.error),
+                    contentPadding = PaddingValues(horizontal = sp.sm, vertical = 4.dp),
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Elimina",
+                        modifier = Modifier.size(14.dp),
+                    )
+                    Spacer(modifier = Modifier.width(3.dp))
+                    Text("Elimina", style = MaterialTheme.typography.labelMedium)
                 }
             }
         }
