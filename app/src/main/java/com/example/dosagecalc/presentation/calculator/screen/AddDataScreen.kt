@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
@@ -34,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.dosagecalc.domain.model.FormulaType
 import com.example.dosagecalc.presentation.calculator.AddDataViewModel
 import com.example.dosagecalc.presentation.ui.components.ExpressiveCard
@@ -198,7 +199,7 @@ fun AddDataScreen(
                                     readOnly = true,
                                     label = { Text("Categoria Farmaco") },
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
-                                    modifier = Modifier.fillMaxWidth().menuAnchor(),
+                                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                                     shape = shapes.card,
                                 )
                                 ExposedDropdownMenu(
@@ -239,7 +240,7 @@ fun AddDataScreen(
                                     readOnly = true,
                                     label = { Text("Formula di Calcolo") },
                                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                                    modifier = Modifier.fillMaxWidth().menuAnchor(),
+                                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                                     shape = shapes.card,
                                 )
                                 ExposedDropdownMenu(

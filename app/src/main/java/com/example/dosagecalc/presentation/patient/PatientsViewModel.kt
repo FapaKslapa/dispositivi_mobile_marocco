@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.example.dosagecalc.domain.model.Patient
 import com.example.dosagecalc.domain.usecase.ManagePatientsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +36,7 @@ class PatientsViewModel
         private val _uiState = MutableStateFlow(PatientsUiState())
         val uiState: StateFlow<PatientsUiState> = _uiState.asStateFlow()
 
+        @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
         val patientsPaged: Flow<PagingData<Patient>> =
             _searchQuery
                 .flatMapLatest { query -> managePatientsUseCase.getPatientsPaged(query) }

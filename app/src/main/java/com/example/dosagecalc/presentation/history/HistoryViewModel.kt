@@ -10,6 +10,7 @@ import com.example.dosagecalc.domain.model.Patient
 import com.example.dosagecalc.domain.usecase.ManageHistoryUseCase
 import com.example.dosagecalc.domain.usecase.ManagePatientsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,6 +45,7 @@ class HistoryViewModel
         private val _uiState = MutableStateFlow(HistoryUiState())
         val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
+        @OptIn(ExperimentalCoroutinesApi::class)
         val historyPaged: Flow<PagingData<HistoryRecord>> =
             combine(_searchQuery, patientIdFilter) { query, patientId ->
                 if (patientId != null) {

@@ -92,7 +92,7 @@ fun PatientAddSheet(
         Text(
             text =
                 if (isEditMode) {
-                    "Aggiorna i dati di ${patientToEdit?.name} ${patientToEdit?.surname}"
+                    "Aggiorna i dati di ${patientToEdit.name} ${patientToEdit.surname}"
                 } else {
                     "Inserisci i dati per velocizzare i futuri calcoli"
                 },

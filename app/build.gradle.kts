@@ -60,6 +60,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
                 "androidx.compose.foundation.layout.ExperimentalLayoutApi",
             ),
         )
+        freeCompilerArgs.addAll(listOf("-Xannotation-default-target=param-property"))
     }
 }
 

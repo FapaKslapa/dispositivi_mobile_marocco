@@ -33,11 +33,11 @@ fun DoseTrendChart(
 ) {
     if (records.size < 2) return
 
-    val modelProducer = remember { CartesianChartModelProducer.build() }
+    val modelProducer = remember { CartesianChartModelProducer() }
     val sortedRecords = remember(records) { records.sortedBy { it.date } }
 
     LaunchedEffect(sortedRecords) {
-        modelProducer.tryRunTransaction {
+        modelProducer.runTransaction {
             lineSeries {
                 series(sortedRecords.map { it.calculatedDose })
             }
