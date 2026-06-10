@@ -1,16 +1,9 @@
-# Regole ProGuard per DosageCalc
-# Applicate solo nelle build di release (minifyEnabled = true)
-
-# Mantiene le data class usate da kotlinx.serialization
-# (il plugin serialization genera il codice corretto, ma per sicurezza
-# preserviamo i nomi dei modelli di dominio e dei DTO)
+# kotlinx.serialization uses class names at runtime for polymorphic deserialization
 -keepclassmembers class com.example.dosagecalc.data.model.** {
     *;
 }
 
-# Hilt genera classi a compile-time: non servono regole extra
-# perché usa KSP (non reflection runtime).
+# Hilt generates all wiring at compile time via KSP — no runtime reflection needed.
 
-# Regola standard per le coroutine
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
