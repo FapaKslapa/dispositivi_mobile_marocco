@@ -6,6 +6,14 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.4.1] — 2026-06-10
+
+### Fixed
+- Fixed all Detekt static analysis warnings and rules violations across domain, data, and presentation layers.
+- Corrected dose scaling impairment calculation logic where updates were previously ignored.
+
+---
+
 ## [1.4.0] — 2026-06-10
 
 ### Added
@@ -90,6 +98,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+[1.4.1]: https://github.com/FapaKslapa/dosage_calc/releases/tag/v1.4.1
 [1.4.0]: https://github.com/FapaKslapa/dosage_calc/releases/tag/v1.4.0
 [1.1.1]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.1.1
 [1.1.0]: https://github.com/FapaKslapa/dispositivi_mobile_marocco/releases/tag/v1.1.0
