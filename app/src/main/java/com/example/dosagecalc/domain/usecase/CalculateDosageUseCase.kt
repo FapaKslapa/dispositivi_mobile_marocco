@@ -9,6 +9,14 @@ import com.example.dosagecalc.domain.model.RenalStage
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+private const val PERCENTAGE_FACTOR = 100
+private const val RENAL_STAGE_G2_FACTOR = 0.10
+private const val RENAL_STAGE_G3_FACTOR = 0.35
+private const val RENAL_STAGE_G4_FACTOR = 0.75
+private const val HEPATIC_CHILD_A_FACTOR = 0.25
+private const val HEPATIC_CHILD_B_FACTOR = 0.65
+
+@Suppress("TooManyFunctions")
 class CalculateDosageUseCase
     @Inject
     constructor(
@@ -51,7 +59,11 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDose = if (drug.daysPerCycle != null) finalDose * drug.daysPerCycle else null
-            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) cycleDose * drug.numberOfCycles else null
+            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) {
+                cycleDose * drug.numberOfCycles
+            } else {
+                null
+            }
 
             return DosageResult.Success(
                 totalDose = finalDose,
@@ -92,7 +104,11 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDose = if (drug.daysPerCycle != null) finalDose * drug.daysPerCycle else null
-            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) cycleDose * drug.numberOfCycles else null
+            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) {
+                cycleDose * drug.numberOfCycles
+            } else {
+                null
+            }
 
             return DosageResult.Success(
                 totalDose = finalDose,
@@ -117,7 +133,11 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDose = if (drug.daysPerCycle != null) impairedDose * drug.daysPerCycle else null
-            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) cycleDose * drug.numberOfCycles else null
+            val therapyDose = if (cycleDose != null && drug.numberOfCycles != null) {
+                cycleDose * drug.numberOfCycles
+            } else {
+                null
+            }
 
             return DosageResult.Success(
                 totalDose = impairedDose,
@@ -156,7 +176,11 @@ class CalculateDosageUseCase
             val fullAlert = listOf(drug.alert, impAlert).filter { it.isNotBlank() }.joinToString("\n\n")
 
             val cycleDoseMin = if (drug.daysPerCycle != null) finalMin * drug.daysPerCycle else null
-            val therapyDoseMin = if (cycleDoseMin != null && drug.numberOfCycles != null) cycleDoseMin * drug.numberOfCycles else null
+            val therapyDoseMin = if (cycleDoseMin != null && drug.numberOfCycles != null) {
+                cycleDoseMin * drug.numberOfCycles
+            } else {
+                null
+            }
 
             return DosageResult.Success(
                 totalDose = finalMin,
@@ -179,42 +203,60 @@ class CalculateDosageUseCase
             var dose = rawDose
             val alerts = mutableListOf<String>()
 
-            if (patientData.hasRenalImpairment) {
-                val stage = patientData.renalStage
-                if (drug.renalDoseMultiplier != null) {
-                    val factor = renalFactor(stage, drug.renalDoseMultiplier)
-                    dose *= factor
-                    val pct = ((1.0 - factor) * 100).roundToInt()
-                    if (pct > 0) {
-                        alerts += "⚠ Dose reduced by $pct% — ${stage.label} (${stage.gfrRange})." +
-                            if (drug.renalAlert != null) "\n${drug.renalAlert}" else ""
-                    }
-                } else {
-                    if (stage != RenalStage.NONE) {
-                        alerts +=
-                            "⚠ ${stage.label} (${stage.gfrRange}) — no adjustment defined in official documentation for this drug. Proceed with caution."
-                    }
-                }
-            }
-
-            if (patientData.hasHepaticImpairment) {
-                val stage = patientData.hepaticStage
-                if (drug.hepaticDoseMultiplier != null) {
-                    val factor = hepaticFactor(stage, drug.hepaticDoseMultiplier)
-                    dose *= factor
-                    val pct = ((1.0 - factor) * 100).roundToInt()
-                    if (pct > 0) {
-                        alerts += "⚠ Dose reduced by $pct% — ${stage.label}: ${stage.description}." +
-                            if (drug.hepaticAlert != null) "\n${drug.hepaticAlert}" else ""
-                    }
-                } else {
-                    if (stage != HepaticStage.NONE) {
-                        alerts += "⚠ ${stage.label} — no adjustment defined in official documentation for this drug. Proceed with caution."
-                    }
-                }
-            }
+            dose = applyRenalAdjustment(dose, drug, patientData, alerts)
+            dose = applyHepaticAdjustment(dose, drug, patientData, alerts)
 
             return Pair(dose, alerts.joinToString("\n\n"))
+        }
+
+        private fun applyRenalAdjustment(
+            dose: Double,
+            drug: Drug,
+            patientData: PatientData,
+            alerts: MutableList<String>
+        ): Double {
+            if (!patientData.hasRenalImpairment) return dose
+            val stage = patientData.renalStage
+            return if (drug.renalDoseMultiplier != null) {
+                val factor = renalFactor(stage, drug.renalDoseMultiplier)
+                val pct = ((1.0 - factor) * PERCENTAGE_FACTOR).roundToInt()
+                if (pct > 0) {
+                    alerts += "⚠ Dose reduced by $pct% — ${stage.label} (${stage.gfrRange})." +
+                        if (drug.renalAlert != null) "\n${drug.renalAlert}" else ""
+                }
+                dose * factor
+            } else {
+                if (stage != RenalStage.NONE) {
+                    alerts += "⚠ ${stage.label} (${stage.gfrRange}) — no adjustment " +
+                        "defined in official documentation for this drug. Proceed with caution."
+                }
+                dose
+            }
+        }
+
+        private fun applyHepaticAdjustment(
+            dose: Double,
+            drug: Drug,
+            patientData: PatientData,
+            alerts: MutableList<String>
+        ): Double {
+            if (!patientData.hasHepaticImpairment) return dose
+            val stage = patientData.hepaticStage
+            return if (drug.hepaticDoseMultiplier != null) {
+                val factor = hepaticFactor(stage, drug.hepaticDoseMultiplier)
+                val pct = ((1.0 - factor) * PERCENTAGE_FACTOR).roundToInt()
+                if (pct > 0) {
+                    alerts += "⚠ Dose reduced by $pct% — ${stage.label}: ${stage.description}." +
+                        if (drug.hepaticAlert != null) "\n${drug.hepaticAlert}" else ""
+                }
+                dose * factor
+            } else {
+                if (stage != HepaticStage.NONE) {
+                    alerts += "⚠ ${stage.label} — no adjustment defined in " +
+                        "official documentation for this drug. Proceed with caution."
+                }
+                dose
+            }
         }
 
         private fun renalFactor(
@@ -223,9 +265,9 @@ class CalculateDosageUseCase
         ): Double =
             when (stage) {
                 RenalStage.NONE -> 1.0
-                RenalStage.G2 -> lerp(1.0, drugMultiplier, 0.10)
-                RenalStage.G3 -> lerp(1.0, drugMultiplier, 0.35)
-                RenalStage.G4 -> lerp(1.0, drugMultiplier, 0.75)
+                RenalStage.G2 -> lerp(1.0, drugMultiplier, RENAL_STAGE_G2_FACTOR)
+                RenalStage.G3 -> lerp(1.0, drugMultiplier, RENAL_STAGE_G3_FACTOR)
+                RenalStage.G4 -> lerp(1.0, drugMultiplier, RENAL_STAGE_G4_FACTOR)
                 RenalStage.G5 -> drugMultiplier
             }
 
@@ -235,8 +277,8 @@ class CalculateDosageUseCase
         ): Double =
             when (stage) {
                 HepaticStage.NONE -> 1.0
-                HepaticStage.CHILD_A -> lerp(1.0, drugMultiplier, 0.25)
-                HepaticStage.CHILD_B -> lerp(1.0, drugMultiplier, 0.65)
+                HepaticStage.CHILD_A -> lerp(1.0, drugMultiplier, HEPATIC_CHILD_A_FACTOR)
+                HepaticStage.CHILD_B -> lerp(1.0, drugMultiplier, HEPATIC_CHILD_B_FACTOR)
                 HepaticStage.CHILD_C -> drugMultiplier
             }
 
@@ -250,7 +292,11 @@ class CalculateDosageUseCase
             dose: Double,
             maxDose: Double?,
         ): Pair<Double, Boolean> {
-            if (maxDose == null || dose <= maxDose) return Pair(dose, false)
-            return Pair(maxDose, true)
+            if (maxDose == null) return Pair(dose, false)
+            return if (dose > maxDose) {
+                Pair(maxDose, true)
+            } else {
+                Pair(dose, false)
+            }
         }
     }

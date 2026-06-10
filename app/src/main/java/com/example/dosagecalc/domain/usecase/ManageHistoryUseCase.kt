@@ -14,14 +14,17 @@ class ManageHistoryUseCase
     ) {
         fun getAllHistory(): Flow<List<HistoryRecord>> = historyRepository.getAllHistory()
 
-        fun getAllHistoryPaged(query: String): Flow<PagingData<HistoryRecord>> = historyRepository.getAllHistoryPaged(query)
+        fun getAllHistoryPaged(query: String): Flow<PagingData<HistoryRecord>> =
+            historyRepository.getAllHistoryPaged(query)
 
-        fun getHistoryForPatient(patientId: String): Flow<List<HistoryRecord>> = historyRepository.getHistoryForPatient(patientId)
+        fun getHistoryForPatient(patientId: String): Flow<List<HistoryRecord>> =
+            historyRepository.getHistoryForPatient(patientId)
 
         fun getHistoryForPatientPaged(
             patientId: String,
             query: String,
-        ): Flow<PagingData<HistoryRecord>> = historyRepository.getHistoryForPatientPaged(patientId, query)
+        ): Flow<PagingData<HistoryRecord>> =
+            historyRepository.getHistoryForPatientPaged(patientId, query)
 
         suspend fun saveHistoryRecord(record: HistoryRecord) {
             val toSave =

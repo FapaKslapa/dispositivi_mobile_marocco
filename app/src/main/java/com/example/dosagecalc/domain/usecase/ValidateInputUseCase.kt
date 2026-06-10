@@ -5,6 +5,13 @@ import com.example.dosagecalc.domain.model.FormulaType
 import com.example.dosagecalc.domain.model.PatientData
 import javax.inject.Inject
 
+private const val MIN_WEIGHT = 1.0
+private const val MAX_WEIGHT = 500.0
+private const val MIN_HEIGHT = 30.0
+private const val MAX_HEIGHT = 280.0
+private const val MIN_AGE = 0
+private const val MAX_AGE = 120
+
 class ValidateInputUseCase
     @Inject
     constructor() {
@@ -14,6 +21,22 @@ class ValidateInputUseCase
         ): ValidationResult {
             val errors = mutableListOf<String>()
 
+            validateFormulaRequirements(drug, patientData, errors)
+            validatePhysiologicalRanges(patientData, errors)
+            validateDrugConstraints(drug, patientData, errors)
+
+            return if (errors.isEmpty()) {
+                ValidationResult.Valid
+            } else {
+                ValidationResult.Invalid(errors)
+            }
+        }
+
+        private fun validateFormulaRequirements(
+            drug: Drug,
+            patientData: PatientData,
+            errors: MutableList<String>
+        ) {
             when (drug.formulaType) {
                 FormulaType.PER_KG, FormulaType.BY_RANGE -> {
                     if (patientData.weightKg == null) {
@@ -30,25 +53,36 @@ class ValidateInputUseCase
                 }
                 FormulaType.FIXED -> Unit
             }
+        }
 
+        private fun validatePhysiologicalRanges(
+            patientData: PatientData,
+            errors: MutableList<String>
+        ) {
             patientData.weightKg?.let { w ->
-                if (w < 1.0 || w > 500.0) {
+                if (w < MIN_WEIGHT || w > MAX_WEIGHT) {
                     errors.add("Peso non fisiologico: $w kg. Range accettato: 1–500 kg.")
                 }
             }
 
             patientData.heightCm?.let { h ->
-                if (h < 30.0 || h > 280.0) {
+                if (h < MIN_HEIGHT || h > MAX_HEIGHT) {
                     errors.add("Altezza non fisiologica: $h cm. Range accettato: 30–280 cm.")
                 }
             }
 
             patientData.ageYears?.let { age ->
-                if (age < 0 || age > 120) {
+                if (age < MIN_AGE || age > MAX_AGE) {
                     errors.add("Età non valida: $age anni.")
                 }
             }
+        }
 
+        private fun validateDrugConstraints(
+            drug: Drug,
+            patientData: PatientData,
+            errors: MutableList<String>
+        ) {
             drug.minWeightKg?.let { minW ->
                 patientData.weightKg?.let { w ->
                     if (w < minW) {
@@ -80,12 +114,6 @@ class ValidateInputUseCase
                         )
                     }
                 }
-            }
-
-            return if (errors.isEmpty()) {
-                ValidationResult.Valid
-            } else {
-                ValidationResult.Invalid(errors)
             }
         }
     }
