@@ -1,12 +1,12 @@
 # Changelog
 
-All notable changes to DosageCalc are documented here.  
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);  
+All notable changes to DosageCalc are documented here.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.4.1] — 2026-06-10
+## [1.4.1] - 2026-06-10
 
 ### Fixed
 - Fixed all Detekt static analysis warnings and rules violations across domain, data, and presentation layers.
@@ -14,7 +14,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.4.0] — 2026-06-10
+## [1.4.0] - 2026-06-10
 
 ### Added
 - Macrobenchmark module for baseline profile generation.
@@ -36,21 +36,21 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [1.1.1] — 2026-04-10
+## [1.1.1] - 2026-04-10
 
 ### Fixed
 - Release APK is now signed with the debug key so it can be installed directly on any Android device.
 
 ---
 
-## [1.1.0] — 2026-04-10
+## [1.1.0] - 2026-04-10
 
 ### Added
 - Responsive layout: portrait, landscape and tablet support.
 
 ---
 
-## [1.0.0] — 2026-04-10
+## [1.0.0] - 2026-04-10
 
 ### Added
 

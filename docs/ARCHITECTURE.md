@@ -14,11 +14,11 @@ presentation  ──►  domain  ◄──  data
 
 ### Domain
 
-The core of the application. Contains no Android dependencies — only pure Kotlin.
+The core of the application. Contains no Android dependencies - only pure Kotlin.
 
-- **model/** — data classes and sealed classes (`Drug`, `Patient`, `DosageResult`, `Reminder`, …)
-- **repository/** — interfaces that define contracts for data access (`DrugRepository`, `PatientRepository`, …)
-- **usecase/** — one class per business operation (`CalculateDosageUseCase`, `CheckDrugInteractionsUseCase`, …)
+- **model/** - data classes and sealed classes (`Drug`, `Patient`, `DosageResult`, `Reminder`, …)
+- **repository/** - interfaces that define contracts for data access (`DrugRepository`, `PatientRepository`, …)
+- **usecase/** - one class per business operation (`CalculateDosageUseCase`, `CheckDrugInteractionsUseCase`, …)
 
 Use cases own the business logic. A repository interface is the only dependency they accept.
 
@@ -26,20 +26,20 @@ Use cases own the business logic. A repository interface is the only dependency 
 
 Implements the repository interfaces and manages all I/O.
 
-- **database/** — Room `AppDatabase` (SQLCipher-encrypted, version 8)
-- **datasource/** — DAOs (`PatientDao`, `HistoryDao`, `ReminderDao`, `CustomDrugDao`) and `LocalDrugDataSource` for JSON assets
-- **model/** — Room entity classes and `@Serializable` DTOs; each has a `toDomain()` conversion function
-- **repository/** — concrete implementations (`PatientRepositoryImpl`, `DrugRepositoryImpl`, …)
-- **di/** — Hilt `DataModule` that wires implementations to interfaces with `@Binds` and `@Provides`
+- **database/** - Room `AppDatabase` (SQLCipher-encrypted, version 8)
+- **datasource/** - DAOs (`PatientDao`, `HistoryDao`, `ReminderDao`, `CustomDrugDao`) and `LocalDrugDataSource` for JSON assets
+- **model/** - Room entity classes and `@Serializable` DTOs; each has a `toDomain()` conversion function
+- **repository/** - concrete implementations (`PatientRepositoryImpl`, `DrugRepositoryImpl`, …)
+- **di/** - Hilt `DataModule` that wires implementations to interfaces with `@Binds` and `@Provides`
 
 ### Presentation
 
 MVVM with Jetpack Compose and `StateFlow`.
 
-- **navigation/** — `AppNavigation` with a single `NavHost`; screens are composables, not fragments
-- **calculator/**, **patient/**, **history/**, **onboarding/** — each sub-feature has its own `ViewModel`, `UiState` data class, component files, and screen files
-- **ui/theme/** — Material 3 color scheme, typography, shapes, spacing, elevation tokens
-- **ui/widget/** — two Jetpack Glance widgets
+- **navigation/** - `AppNavigation` with a single `NavHost`; screens are composables, not fragments
+- **calculator/**, **patient/**, **history/**, **onboarding/** - each sub-feature has its own `ViewModel`, `UiState` data class, component files, and screen files
+- **ui/theme/** - Material 3 color scheme, typography, shapes, spacing, elevation tokens
+- **ui/widget/** - two Jetpack Glance widgets
 
 ---
 
@@ -87,7 +87,7 @@ All dates are stored as `Long` epoch milliseconds. The domain model uses `LocalD
 | `getAllHistory()` | O(n) | Full table scan ordered by date |
 | `getAllHistoryPaged(query)` | O(n) amortised | Room `PagingSource` with a 20-row page; SQLite `LIKE` with leading wildcard prevents index use |
 | `getHistoryForPatient(id)` | O(k) | Index on `patientId`; k = rows for that patient |
-| `getPatientsPaged(query)` | O(n) | `LIKE '%query%'` on name/surname — no index |
+| `getPatientsPaged(query)` | O(n) | `LIKE '%query%'` on name/surname - no index |
 | `checkInteraction(id1, id2)` | O(m) | Linear scan over the in-memory interactions list; m = number of known interactions |
 | BSA calculation | O(1) | One or two arithmetic operations |
 | Dose ceiling | O(1) | Single comparison |
@@ -100,6 +100,6 @@ The `LIKE '%query%'` pattern (leading wildcard) cannot use a B-tree index in SQL
 
 Unit tests live in `app/src/test/` and use **JUnit 5** with **MockK** for mocking.
 
-- `CalculateBsaUseCaseTest` — parameterised tests for Mosteller and Du Bois formulas against known reference values
-- `CalculateDosageUseCaseTest` — per-kg calculation, dose ceiling capping, validation errors for out-of-range patients
-- `CheckDrugInteractionsUseCaseTest` — interaction detection with mocked repository
+- `CalculateBsaUseCaseTest` - parameterised tests for Mosteller and Du Bois formulas against known reference values
+- `CalculateDosageUseCaseTest` - per-kg calculation, dose ceiling capping, validation errors for out-of-range patients
+- `CheckDrugInteractionsUseCaseTest` - interaction detection with mocked repository

@@ -155,8 +155,8 @@ Every successful calculation is saved as a `HistoryRecord` with the patient ID (
 
 The history screen uses a paged `LazyColumn`. The analytics screen shows:
 
-- **Dose trend chart** — a line chart for a selected drug + patient combination, built with Canvas drawing (no chart library).
-- **Category distribution** — a bar/percentage summary of how many calculations belong to each drug category.
+- **Dose trend chart** - a line chart for a selected drug + patient combination, built with Canvas drawing (no chart library).
+- **Category distribution** - a bar/percentage summary of how many calculations belong to each drug category.
 
 ---
 
@@ -188,8 +188,8 @@ Each reminder series shares a tag (`seriesId`) so all its work requests can be c
 
 Two Jetpack Glance widgets are available:
 
-- **LastDrugWidget** — shows the drug name and calculated dose from the most recent history record.
-- **NextReminderWidget** — shows the time of the next scheduled reminder (the first reminder whose time is still in the future in the current day, or the first reminder of the next day if all have passed).
+- **LastDrugWidget** - shows the drug name and calculated dose from the most recent history record.
+- **NextReminderWidget** - shows the time of the next scheduled reminder (the first reminder whose time is still in the future in the current day, or the first reminder of the next day if all have passed).
 
 Both widgets tap to open `MainActivity`. `WidgetUpdateHelper.updateAllWidgets()` is called after every calculation and after every reminder add/delete so the widgets stay fresh without polling.
 
@@ -199,10 +199,10 @@ Both widgets tap to open `MainActivity`. `WidgetUpdateHelper.updateAllWidgets()`
 
 The app supports four form factors: phone portrait, phone landscape, foldable, and tablet.
 
-- `isCompactHeight()` — true when the device is a phone in landscape; used to compress tall headers.
-- `isMediumOrExpandedWidth()` — true on tablets and large foldables; used to switch to side-by-side layouts.
-- `isExpandedWidth()` — true on tablets in landscape (width class = Expanded); used for two-column grids.
-- `responsiveContentWidth()` — a `Modifier` extension that caps content width at 640 dp; applied to all forms and detail screens so they don't stretch to the full tablet width.
+- `isCompactHeight()` - true when the device is a phone in landscape; used to compress tall headers.
+- `isMediumOrExpandedWidth()` - true on tablets and large foldables; used to switch to side-by-side layouts.
+- `isExpandedWidth()` - true on tablets in landscape (width class = Expanded); used for two-column grids.
+- `responsiveContentWidth()` - a `Modifier` extension that caps content width at 640 dp; applied to all forms and detail screens so they don't stretch to the full tablet width.
 
 ---
 

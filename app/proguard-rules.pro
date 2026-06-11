@@ -3,7 +3,7 @@
     *;
 }
 
-# Hilt generates all wiring at compile time via KSP — no runtime reflection needed.
+# Hilt generates all wiring at compile time via KSP - no runtime reflection needed.
 
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}

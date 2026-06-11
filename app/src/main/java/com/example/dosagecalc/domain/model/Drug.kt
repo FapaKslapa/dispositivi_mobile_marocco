@@ -48,9 +48,9 @@ enum class HepaticStage(
     val description: String,
 ) {
     NONE("Nessuna (Normale)", ""),
-    CHILD_A("Child-Pugh A", "Lieve — 5–6 punti"),
-    CHILD_B("Child-Pugh B", "Moderata — 7–9 punti"),
-    CHILD_C("Child-Pugh C", "Grave — 10–15 punti"),
+    CHILD_A("Child-Pugh A", "Lieve - 5–6 punti"),
+    CHILD_B("Child-Pugh B", "Moderata - 7–9 punti"),
+    CHILD_C("Child-Pugh C", "Grave - 10–15 punti"),
 }
 
 enum class DrugCategory(

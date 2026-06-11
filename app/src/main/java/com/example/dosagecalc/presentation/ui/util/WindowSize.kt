@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 
 val LocalWindowSizeClass =
     compositionLocalOf<WindowSizeClass> {
-        error("WindowSizeClass not provided — wrap root content with CompositionLocalProvider")
+        error("WindowSizeClass not provided - wrap root content with CompositionLocalProvider")
     }
 
 @Composable

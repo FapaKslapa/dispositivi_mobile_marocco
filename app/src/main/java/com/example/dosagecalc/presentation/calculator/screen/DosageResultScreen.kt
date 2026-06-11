@@ -115,7 +115,7 @@ fun DosageResultScreen(
                         .verticalScroll(rememberScrollState()),
             ) {
                 when (result) {
-                    is DosageResult.Success -> SuccessHeader(result, uiState.selectedDrug?.let { "${it.name} — ${it.indication}" })
+                    is DosageResult.Success -> SuccessHeader(result, uiState.selectedDrug?.let { "${it.name} - ${it.indication}" })
                     is DosageResult.ValidationError -> ErrorHeader(title = "Farmaco Non Indicato", message = result.reason)
                     is DosageResult.Error -> ErrorHeader(title = "Errore di Calcolo", message = result.message)
                 }

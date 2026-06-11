@@ -82,7 +82,7 @@ fun PatientInputField(
     val displayText =
         value.toFloatOrNull()?.let { v ->
             if (v == kotlin.math.floor(v.toDouble()).toFloat()) v.toLong().toString() else value
-        } ?: if (value.isEmpty()) "—" else value
+        } ?: if (value.isEmpty()) "-" else value
 
     LaunchedEffect(isEditing) {
         if (isEditing) focusRequester.requestFocus()

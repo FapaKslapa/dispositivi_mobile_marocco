@@ -4,7 +4,7 @@
 
 ### Jetpack Compose
 
-The entire UI is written in Compose — no XML layouts. Key patterns used:
+The entire UI is written in Compose - no XML layouts. Key patterns used:
 
 - **`StateFlow` → `collectAsStateWithLifecycle()`** collects state inside a composable, automatically stopping collection when the composable leaves the `STARTED` lifecycle state. This avoids unnecessary work while the app is in the background.
 - **`hiltViewModel()`** injects the right ViewModel scoped to the current back-stack entry. When the same ViewModel instance is needed across multiple screens (the calculator flow), it is obtained by calling `hiltViewModel()` at the `NavHost` level and passed down as a parameter.
@@ -29,7 +29,7 @@ The app uses a hand-crafted Material 3 color scheme (not dynamic color) defined 
 
 Room generates the DAO implementations and handles the SQL boilerplate. The app uses:
 
-- `@Query` with `Flow<List<T>>` return type for reactive lists — Room re-emits on every write.
+- `@Query` with `Flow<List<T>>` return type for reactive lists - Room re-emits on every write.
 - `@Query` with `PagingSource<Int, T>` return type for paginated screens (history, patients).
 - `ForeignKey(onDelete = CASCADE)` on `history_records.patientId` so that deleting a patient automatically removes all their history rows.
 - `exportSchema = true` produces the JSON schema files in `app/schemas/`, which serve as a migration history.

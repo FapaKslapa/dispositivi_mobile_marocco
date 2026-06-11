@@ -4,7 +4,7 @@ Android application for dermatological drug dosage calculation. Designed for med
 
 ## What it does
 
-DosageCalc guides the clinician through a three-step flow — drug selection, patient data entry, and dose result — and stores every calculation in a local encrypted database for future reference.
+DosageCalc guides the clinician through a three-step flow - drug selection, patient data entry, and dose result - and stores every calculation in a local encrypted database for future reference.
 
 ### Dose calculation
 

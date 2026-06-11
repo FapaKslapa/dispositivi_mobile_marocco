@@ -225,13 +225,13 @@ class CalculateDosageUseCase
                 val factor = renalFactor(stage, drug.renalDoseMultiplier)
                 val pct = ((1.0 - factor) * PERCENTAGE_FACTOR).roundToInt()
                 if (pct > 0) {
-                    alerts += "⚠ Dose reduced by $pct% — ${stage.label} (${stage.gfrRange})." +
+                    alerts += "⚠ Dose reduced by $pct% - ${stage.label} (${stage.gfrRange})." +
                         if (drug.renalAlert != null) "\n${drug.renalAlert}" else ""
                 }
                 dose * factor
             } else {
                 if (stage != RenalStage.NONE) {
-                    alerts += "⚠ ${stage.label} (${stage.gfrRange}) — no adjustment " +
+                    alerts += "⚠ ${stage.label} (${stage.gfrRange}) - no adjustment " +
                         "defined in official documentation for this drug. Proceed with caution."
                 }
                 dose
@@ -250,13 +250,13 @@ class CalculateDosageUseCase
                 val factor = hepaticFactor(stage, drug.hepaticDoseMultiplier)
                 val pct = ((1.0 - factor) * PERCENTAGE_FACTOR).roundToInt()
                 if (pct > 0) {
-                    alerts += "⚠ Dose reduced by $pct% — ${stage.label}: ${stage.description}." +
+                    alerts += "⚠ Dose reduced by $pct% - ${stage.label}: ${stage.description}." +
                         if (drug.hepaticAlert != null) "\n${drug.hepaticAlert}" else ""
                 }
                 dose * factor
             } else {
                 if (stage != HepaticStage.NONE) {
-                    alerts += "⚠ ${stage.label} — no adjustment defined in " +
+                    alerts += "⚠ ${stage.label} - no adjustment defined in " +
                         "official documentation for this drug. Proceed with caution."
                 }
                 dose
